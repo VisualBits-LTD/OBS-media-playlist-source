@@ -16,6 +16,7 @@ jobs:
 
   gersemi:
     runs-on: self-hosted
+    needs: clang-format
     steps:
       - uses: actions/checkout@v4
         with:
