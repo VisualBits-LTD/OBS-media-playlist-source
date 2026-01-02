@@ -8,7 +8,7 @@ on:
 jobs:
   check-event:
     name: Check GitHub Event Data 🔎
-    runs-on: ubuntu-24.04
+    runs-on: self-hosted
     defaults:
       run:
         shell: bash
@@ -73,7 +73,7 @@ jobs:
 
   macos-build:
     name: Build for macOS 🍏
-    runs-on: macos-15
+    runs-on: self-hosted
     needs: check-event
     defaults:
       run:
@@ -180,7 +180,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
     needs: check-event
     defaults:
       run:
@@ -251,7 +251,7 @@ jobs:
 
   windows-build:
     name: Build for Windows 🪟
-    runs-on: windows-2022
+    runs-on: self-hosted
     needs: check-event
     defaults:
       run:
