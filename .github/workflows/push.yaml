@@ -28,7 +28,7 @@ jobs:
   create-release:
     name: Create Release 🛫
     if: github.ref_type == 'tag'
-    runs-on: self-hosted
+    runs-on: [self-hosted, linux]
     needs: build-project
     defaults:
       run:
