@@ -377,6 +377,8 @@ static void media_source_ended(void *data, calldata_t *cd)
 		mps->user_stopped = false;
 		return;
 	} else if (mps->current_media_index < mps->files.num - 1 || mps->loop) {
+		// Clear the current file to release it before loading the next one
+		clear_media_source(mps);
 		obs_source_media_next(mps->source);
 	} else {
 		mps_end_reached(mps);
