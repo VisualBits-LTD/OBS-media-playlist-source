@@ -20,7 +20,6 @@ jobs:
 
   build-project:
     name: Build Project 🧱
-    needs: check-format
     uses: ./.github/workflows/build-project.yaml
     secrets: inherit
     permissions:
