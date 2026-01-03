@@ -87,6 +87,18 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Update Version from Git Tag 🏷️
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          : Update Version from Git Tag 🏷️
+          if [[ "${RUNNER_DEBUG}" ]]; then set -x; fi
+
+          # Extract version from tag (v1.3.3 -> 1.3.3)
+          version="${GITHUB_REF_NAME#v}"
+          
+          # Update buildspec.json with the tag version
+          jq --arg version "$version" '.version = $version' buildspec.json > buildspec.json.tmp && mv buildspec.json.tmp buildspec.json
+
       - name: Set Up Environment 🔧
         id: setup
         run: |
