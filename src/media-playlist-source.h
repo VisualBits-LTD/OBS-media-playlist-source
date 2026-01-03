@@ -96,7 +96,6 @@ static inline void reset_folder_item_index(struct media_playlist_source *mps);
 static bool valid_extension(const char *ext);
 
 static void clear_media_source(void *data);
-static void release_current_file(void *data);
 static void update_media_source(void *data, bool forced);
 
 static void select_index_proc_(struct media_playlist_source *mps, size_t media_index, size_t folder_item_index);

@@ -193,19 +193,6 @@ static void clear_media_source(void *data)
 	obs_source_media_stop(mps->source);
 }
 
-/* Release the current file without stopping playback
- * Used when transitioning between playlist items to release file handles */
-static void release_current_file(void *data)
-{
-	struct media_playlist_source *mps = data;
-	obs_data_t *settings = obs_data_create();
-	obs_data_set_bool(settings, S_FFMPEG_IS_LOCAL_FILE, true);
-	obs_data_set_string(settings, S_FFMPEG_INPUT, "");
-	obs_data_set_string(settings, S_FFMPEG_LOCAL_FILE, "");
-	obs_source_update(mps->current_media_source, settings);
-	obs_data_release(settings);
-}
-
 /* Checks if the media source has to be updated, because updating its
  * settings causes it to restart. Can also force update it.
  * Should first call set_current_media_index before calling this
@@ -390,8 +377,7 @@ static void media_source_ended(void *data, calldata_t *cd)
 		mps->user_stopped = false;
 		return;
 	} else if (mps->current_media_index < mps->files.num - 1 || mps->loop) {
-		// Release the current file to free handles before loading the next one
-		release_current_file(mps);
+		// Advance to next file, which will trigger update_media_source
 		obs_source_media_next(mps->source);
 	} else {
 		mps_end_reached(mps);
