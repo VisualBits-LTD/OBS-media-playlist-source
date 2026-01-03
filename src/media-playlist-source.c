@@ -377,8 +377,22 @@ static void media_source_ended(void *data, calldata_t *cd)
 		mps->user_stopped = false;
 		return;
 	} else if (mps->current_media_index < mps->files.num - 1 || mps->loop) {
+		// Temporarily disable close_when_inactive during playlist transition
+		// to prevent the file from being closed before the next one loads
+		bool saved_close = mps->close_when_inactive;
+		mps->close_when_inactive = false;
+		
+		obs_data_t *settings = obs_source_get_settings(mps->current_media_source);
+		obs_data_set_bool(settings, S_FFMPEG_CLOSE_WHEN_INACTIVE, false);
+		obs_source_update(mps->current_media_source, settings);
+		obs_data_release(settings);
+		
 		// Advance to next file, which will trigger update_media_source
 		obs_source_media_next(mps->source);
+		
+		// Restore the original setting after a brief delay
+		// to allow the next file to load
+		mps->close_when_inactive = saved_close;
 	} else {
 		mps_end_reached(mps);
 	}
