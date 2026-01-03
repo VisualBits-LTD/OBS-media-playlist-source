@@ -71,24 +71,8 @@ jobs:
           root_dir="$(pwd)"
           commit_hash="${GITHUB_SHA:0:9}"
 
-          variants=(
-            'windows-x64;zip|exe'
-            'windows-x64-Portable;zip|exe'
-            'windows-x64-Installer;zip|exe'
-            'macos-universal;tar.xz|pkg'
-            'ubuntu-24.04-x86_64;tar.xz|deb|ddeb'
-            'sources;tar.xz'
-          )
-
-          for variant_data in "${variants[@]}"; do
-            IFS=';' read -r variant suffix <<< "${variant_data}"
-
-            candidates=(*-${variant}-${commit_hash}/@(*|*-dbgsym).@(${suffix}))
-
-            for candidate in "${candidates[@]}"; do
-              mv "${candidate}" "${root_dir}"
-            done
-          done
+          # Find and move all artifact files to root directory
+          find . -type f \( -name "*.exe" -o -name "*.zip" -o -name "*.pkg" -o -name "*.deb" -o -name "*.ddeb" -o -name "*.tar.xz" \) -not -path "./.git/*" ! -path "./.github/*" -exec mv {} "${root_dir}/" \;
 
       - name: Generate Checksums 🪪
         if: fromJSON(steps.check.outputs.validTag)
