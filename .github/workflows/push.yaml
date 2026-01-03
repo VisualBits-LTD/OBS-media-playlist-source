@@ -93,7 +93,7 @@ jobs:
         with:
           draft: true
           prerelease: ${{ fromJSON(steps.check.outputs.prerelease) }}
-          tag_name: ${{ steps.check.outputs.version }}
+          tag_name: ${{ github.ref_name }}
           name: ${{ needs.build-project.outputs.pluginName }} ${{ steps.check.outputs.version }}
           body_path: ${{ github.workspace }}/CHECKSUMS.txt
           files: |
